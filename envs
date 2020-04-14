@@ -1,0 +1,16 @@
+conda create -n tsa tensorflow
+conda install keras
+conda install pandas
+conda install scikit-learn
+conda install seaborn
+conda install nltk
+conda install flask
+conda install -c anaconda flask-wtf
+conda install -c conda-forge wordcloud
+pip install tweepy
+conda install -c conda-forge textblob
+conda install -c conda-forge langdetect
+
+https://machinelearningmastery.com/deep-learning-bag-of-words-model-sentiment-analysis/
+
+https://www.earthdatascience.org/courses/earth-analytics-python/using-apis-natural-language-processing-twitter/analyze-tweet-sentiments-in-python/

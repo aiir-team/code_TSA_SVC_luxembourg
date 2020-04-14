@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<br>
+
+<h1>Formatted Dataset with 2 classes</h1>
+
+<br>
+
+<div class="border-top pt-3">
+    Back to homepage: <a class="ml-2" href="{{url_for('home')}}">Home Page</a>
+</div>
+<br/>
+ <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+<div id="word_cloud" style="text-align: center;">
+    <figure>
+        <img src="{{image}}" alt="" />
+        <figcaption style="font-size: 20px; color: red;">Our Features</figcaption>
+</figure>
+
+
+</div>
+
+<div id="graph" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+
+<script type="text/javascript">
+
+    Highcharts.chart('graph', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Formatted Tweets Dataset with 2 classes'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Tweets',
+            //colorByPoint: true,
+            data: [{
+                name: 'Positive',
+                y: parseFloat('{{count_data[1]}}'),
+                color: '#55ff03',
+            }, {
+                name: 'Negative',
+                y: parseFloat('{{count_data[0]}}'),
+                color: '#ff070c',
+                sliced: true,
+                selected: true
+            }]
+        }]
+    });
+
+</script>
+
+
+<div class="table_result table-responsive">
+    <table class="table table-hover table-striped w-auto">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Sentiment</th>
+            <th scope="col">Content</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for tweet in data %}
+            <tr>
+                <th scope="row">{{loop.index}}</th>
+                <td>{{tweet[0]}}</td>
+                <td>{{tweet[1]}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<br>
+<br>
+<h1>Searching your tweets and classifying into classes</h1>
+
+<div class="content-section">
+    <form action="" method="POST">
+        {{form.hidden_tag()}}
+        <div class="row">
+            <div class="col-lg-9 col-sm-9 col-12">
+            <fieldset class="form-group">
+            <div class="form-group">
+                {% if form.searching.errors %}
+                {{form.searching(class="form-control form-control-lg is-invalid")}}
+                <div class="invalid-feedback">
+                    {% for error in form.searching.errors %}
+                    <span>{{error}}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{form.searching(class="form-control form-control-lg")}}
+                {% endif %}
+            </div>
+            </fieldset>
+        </div>
+        <div class="col-lg-2 col-sm-2 col-12">
+            <div class="form-group">
+                {{form.submit(class="btn btn-outline-info")}}
+            </div>
+        </div>
+        </div>
+    </form>
+</div>
+<div class="border-top pt-3">
+    Back to homepage: <a class="ml-2" href="{{url_for('home')}}">Home Page</a>
+</div>
+<br/>
+
+{% if show_result %}
+
+<div class="row">
+    <div id="graph1" class="col-lg-6" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+    <div id="graph2" class="col-lg-6" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+</div>
+
+<script type="text/javascript">
+    var polarity = []
+</script>
+
+{% for item in polarity %}
+    <script type="text/javascript">
+        polarity.push('{{item | safe}}');
+    </script>
+{% endfor %}
+
+<script type="text/javascript">
+    Highcharts.chart('graph1', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Visualization of {{no_tweets}} tweets'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Tweets',
+            //colorByPoint: true,
+            data: [{
+                name: 'Negative',
+                y: parseFloat('{{count_data[0]}}'),
+                color: '#ff070c',
+                sliced: true,
+                selected: true
+            }, {
+                name: 'Neutral',
+                y: parseFloat('{{count_data[1]}}'),
+                color: '#5978ff',
+            }, {
+                name: 'Positive',
+                y: parseFloat('{{count_data[2]}}'),
+                color: '#55ff03',
+            }]
+        }]
+    });
+
+    let trace_data = {
+        x: polarity,
+        type: 'histogram',
+      };
+    Plotly.newPlot('graph2', [trace_data]);
+
+</script>
+
+
+<div class="table_result">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Polarity</th>
+            <th scope="col">Sentiment</th>
+            <th scope="col">Content</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for tweet in tweets %}
+            {% if tweet[2] == 'positive' %}
+                <tr class="table-success">
+            {% elif tweet[2] == 'neutral' %}
+                <tr class="table-primary">
+            {% elif tweet[2] == 'negative' %}
+                <tr class="table-danger">
+            {% endif %}
+                <th scope="row">{{loop.index}}</th>
+                <td>{{ "%.2f"|format(tweet[0]) }}</td>
+                <td>{{tweet[2]}}</td>
+                <td>{{tweet[1]}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endif %}
+
+
+
+{% endblock content %}

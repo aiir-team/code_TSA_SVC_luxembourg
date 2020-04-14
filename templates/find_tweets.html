@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<br>
+<br>
+<h1>Searching your tweets and classifying into 3 classes</h1>
+
+<div class="content-section">
+    <form action="" method="POST">
+        {{form.hidden_tag()}}
+        <div class="row">
+            <div class="col-lg-9 col-sm-9 col-12">
+            <fieldset class="form-group">
+            <div class="form-group">
+                {% if form.searching.errors %}
+                {{form.searching(class="form-control form-control-lg is-invalid")}}
+                <div class="invalid-feedback">
+                    {% for error in form.searching.errors %}
+                    <span>{{error}}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{form.searching(class="form-control form-control-lg")}}
+                {% endif %}
+            </div>
+            </fieldset>
+        </div>
+        <div class="col-lg-2 col-sm-2 col-12">
+            <div class="form-group">
+                {{form.submit(class="btn btn-outline-info")}}
+            </div>
+        </div>
+        </div>
+    </form>
+</div>
+<div class="border-top pt-3">
+    Back to homepage: <a class="ml-2" href="{{url_for('home')}}">Home Page</a>
+</div>
+<br/>
+
+{% if show_result %}
+
+<div id="graph" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+<script type="text/javascript">
+    Highcharts.chart('graph', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Visualization of {{no_tweets}} tweets'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: 'Tweets',
+            //colorByPoint: true,
+            data: [ {
+                name: 'Neutral',
+                y: parseFloat('{{data[0]}}'),
+                color: '#5978ff',
+            }, {
+                name: 'Positive',
+                y: parseFloat('{{data[1]}}'),
+                color: '#55ff03',
+            }, {
+                name: 'Negative',
+                y: parseFloat('{{data[2]}}'),
+                color: '#ff070c',
+                sliced: true,
+                selected: true
+            }
+            ]
+        }]
+    });
+
+</script>
+
+
+<div class="table_result">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">User</th>
+            <th scope="col">Content</th>
+            <th scope="col">Sentiment</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for tweet in tweets %}
+            {% if tweet.sentiment == 'positive' %}
+                <tr class="table-success">
+            {% elif tweet.sentiment == 'neutral' %}
+                <tr class="table-primary">
+            {% elif tweet.sentiment == 'negative' %}
+                <tr class="table-danger">
+            {% endif %}
+                <th scope="row">{{loop.index}}</th>
+                <td>{{tweet.user}}</td>
+                <td>{{tweet.text}}</td>
+                <td>{{tweet.sentiment}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endif %}
+
+
+
+{% endblock content %}

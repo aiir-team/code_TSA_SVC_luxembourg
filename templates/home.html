@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1>Welcome to our Twitter Sentiment Analysis Project!!!</h1>
+
+<div id="project_description">
+    <div class="wrapper">
+        <h3>Team Members</h3>
+        <ul>
+            <li>Thieu Nguyen</li>
+            <li>Daniele</li>
+            <li>Tim</li>
+        </ul>
+    </div>
+
+    <div class="wrapper">
+        <h3>Content</h3>
+        <div class="text">
+            Sentiment analysis refers to the use of machine learning, natural language processing and computational linguistics to determine the sentiment content from the written language, i.e. it
+    analyzes peoples opinions, attitudes and emotions with respect to products, services, organizations, individuals, events or topics. The task of the project is to realize the automatic sentiment
+    analyzer for Twitter messages, which will be trained on the dataset containing tweets that are
+    manually annotated for the sentiment (positive, negative or neutral), and which will be applied
+    afterwards to previously unseen messages to classify their sentiment. Support Vector Machines
+    (SVM) should be used for classifying sentiments into three categories (positive, negative and
+    neutral). The frequency of occurrence of words should be used as features. Since the features are
+    all unique words in the dataset, feature selection need to be performed including the combination
+    of following techniques:
+        </div>
+        <ul>
+            <li>Removing infrequent words (words that appear less than nmin number of times).</li>
+            <li>Removing stop words that add no sentiment value (articles, some prepositions, etc...).</li>
+            <li>Stemming: reducing distinct words to their root form (stem).</li>
+            <li>Removing hashtags, usernames, hyperlinks, numbers, repeated letters (more than 2 repeated letters) and punctuation marks.</li>
+        </ul>
+    </div>
+
+    <div class="wrapper">
+        <h3>Dataset</h3>
+        <div class="text">
+            SemEval-2014 Task 9 Corpus (see reference (B.1)) will be used for training and testing, which
+was collected within the SemEval-2014 Task 9 competition that was a part of the International
+Workshop on Semantic Evaluation. Tweets were gathered on a range of topics using Twitter
+API, including entities (e.g., Gadafi, Steve Jobs), products (e.g. Kindle, Android phone) and
+events (e.g. Japan earthquake, NHL playoffs). It contains training, development and test sets
+which are manually annotated to three sentiments (positive, negative or neutral). While training
+dataset contains only Twitter messages, test dataset contains SMS and LiveJournal messages in
+addition to tweets, i.e. messages from different domains to find out how the systems trained on
+Twitter data only will generalize on out-of-domain text messages. <span id="tips">Tips below:</span>
+        </div>
+
+        <ul>
+            <li>Training and development sets can be merged to have more training instances.</li>
+            <li>It can take approximatelly 18 hours to download the Semeval sentiment analysis training
+dataset</li>
+            <li>Check NLTK library for feature extraction and feature selection.</li>
+            <li>Check sklearn library for SVM implementation.</li>
+        </ul>
+    </div>
+
+    <div class="wrapper">
+        <h3>Expected Results</h3>
+        <ul>
+            <li>Perform sentiment classification using SVM.</li>
+            <li>Experiment with different kernels in SVM (linear, radial basis function).</li>
+            <li>Optimize the hyperparameters of SVM.</li>
+            <li>Calculate accuracy as a measure of performance for different feature selection scenarios and different kernels in SVM.</li>
+        </ul>
+    </div>
+
+</div>
+
+<!--{% for post in posts %}-->
+<!--    <div class="post_box">-->
+<!--        <h1>{{post.title}}</h1>-->
+<!--        <p>By: {{post.author}} on {{post.date_posted}}</p>-->
+<!--        <p>{{post.content}}</p>-->
+<!--    </div>-->
+<!--{% endfor %}-->
+
+{% endblock content %}
